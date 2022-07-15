@@ -68,7 +68,7 @@ async function testDB() {
     const users = await getAllUsers();
 
     // for now, logging is a fine way to see what's up
-    console.log(users, "this is the users from the function getAllUsers");
+    console.log(users, "these are the users from the function getAllUsers");
     console.log("finished database tests!");
   } catch (error) {
     console.error("Error testing database!");
@@ -76,7 +76,18 @@ async function testDB() {
   }
 }
 
-rebuildDB()
-  .then(testDB)
-  .catch(console.error)
-  .finally(() => client.end());
+
+const runDB = async ()=>{
+    try {
+       await rebuildDB().then(testDB)
+    } catch (error) {
+        console.error
+    } finally {
+        client.end()
+    }
+}
+
+
+
+
+runDB()
