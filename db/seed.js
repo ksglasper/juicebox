@@ -1,4 +1,4 @@
-const { client, getAllUsers, createUser } = require("./index");
+const { client, getAllUsers, createUser, updateUser } = require("./index");
 
 async function dropTables() {
   try {
@@ -21,7 +21,10 @@ async function createTables() {
     CREATE TABLE users(
         id SERIAL PRIMARY KEY,
         username VARCHAR(255) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL
+        password VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        location VARCHAR(255) NOT NULL,
+        active BOOLEAN DEFAULT true
     );
       `);
     console.log("Finished building tables!");
@@ -36,15 +39,30 @@ const createInitialUser = async () => {
     const albert = await createUser({
       username: "albert",
       password: "bertie99",
+      name: "Al Bert III",
+      location: 'River North',
+      active: true
     });
-    const sandra = await createUser({ username: 'sandra', password: '2sandy4me' });
-    const glamgal = await createUser({ username: 'glamgal', password: 'soglam' });
+    const sandra = await createUser({
+      username: "sandra",
+      password: "2sandy4me",
+      name: "Wanda",
+      location: 'Brighton Park',
+      active: true
+    });
+    const glamgal = await createUser({
+      username: "glamgal",
+      password: "soglam",
+      name: "Beatrice",
+      location: 'Bridgeport',
+      active: true
+    });
 
     // console.log(albert, 'the first of many!')
 
-    console.log('Finished making user!')
+    console.log("Finished making user!");
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 
@@ -54,7 +72,7 @@ async function rebuildDB() {
 
     await dropTables();
     await createTables();
-    await createInitialUser()
+    await createInitialUser();
   } catch (error) {
     console.error(error);
   }
@@ -62,13 +80,19 @@ async function rebuildDB() {
 
 async function testDB() {
   try {
-    console.log("Starting to test database...");
-    // queries are promises, so we can await them
-    //   const {rows} = await client.query(`SELECT * FROM users;`);
-    const users = await getAllUsers();
 
-    // for now, logging is a fine way to see what's up
+    console.log("Starting to test database...");
+    console.log('Getting all Users')
+    const users = await getAllUsers();
     console.log(users, "these are the users from the function getAllUsers");
+
+    console.log('Calling updateUser on users[0]')
+    const updateUserResult = await updateUser(users[0].id, {
+        name: "Newname Sogood",
+        location: "Lesterville, KY"
+      });
+      console.log("Result:", updateUserResult)
+
     console.log("finished database tests!");
   } catch (error) {
     console.error("Error testing database!");
@@ -76,18 +100,14 @@ async function testDB() {
   }
 }
 
+const runDB = async () => {
+  try {
+    await rebuildDB().then(testDB);
+  } catch (error) {
+    console.error;
+  } finally {
+    client.end();
+  }
+};
 
-const runDB = async ()=>{
-    try {
-       await rebuildDB().then(testDB)
-    } catch (error) {
-        console.error
-    } finally {
-        client.end()
-    }
-}
-
-
-
-
-runDB()
+runDB();
