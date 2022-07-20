@@ -71,8 +71,8 @@ usersRouter.post("/login", async (req, res, next) => {
     if (user && user.password == password) {
 
         console.log({ id: user.id, username },process.env.JWT_SECRET,'object being made')
-        console.log(process.env.JWT_SECRET)
-        console.log(secret)
+        // console.log(process.env.JWT_SECRET)
+        // console.log(secret)
 
         const token = jwt.sign({ id: user.id, username }, process.env.JWT_SECRET, { expiresIn: '1w' });
 
@@ -80,7 +80,6 @@ usersRouter.post("/login", async (req, res, next) => {
 
 
 
-      console.log(user.name, "this is the name stored in the database");
       res.send({ message: "you're logged in!", token });
     } else {
       next({
