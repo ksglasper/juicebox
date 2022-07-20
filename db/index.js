@@ -259,6 +259,21 @@ const getUserById = async (userId) => {
   }
 };
 
+async function getUserByUsername(username) {
+    try {
+      const { rows: [user] } = await client.query(`
+        SELECT *
+        FROM users
+        WHERE username=$1;
+      `, [username]);
+  
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
 async function addTagsToPost(postId, tagList) {
   try {
     // console.log( tagList, 'taglist-last thing before I break')
@@ -355,5 +370,6 @@ module.exports = {
   createTags,
   addTagsToPost,
   getPostsByTagName,
-  getAllTags
+  getAllTags,
+  getUserByUsername
 };
