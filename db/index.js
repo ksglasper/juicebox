@@ -133,6 +133,29 @@ async function getAllUsers() {
 
   return rows;
 }
+async function getAllPosts() {
+    const { rows: postIds } = await client.query(
+      `SELECT id
+        FROM posts;
+      `
+    );
+    const posts = await Promise.all(postIds.map((post) => getPostById(post.id)));
+    //   console.log(posts, 'this is the newest post addition')
+    // console.log(await getPostById(3), 'this is the postIds')
+    return posts;
+  }
+  const getAllTags = async () =>{
+      try {
+        const { rows } = await client.query(
+            `SELECT * 
+              FROM tags;
+            `
+          );
+          return rows;
+      } catch (error) {
+          throw error
+      }
+  }
 
 const updatePost = async (postId, fields = {}) => {
   const { tags } = fields;
@@ -187,17 +210,7 @@ const updatePost = async (postId, fields = {}) => {
   }
 };
 
-async function getAllPosts() {
-  const { rows: postIds } = await client.query(
-    `SELECT id
-      FROM posts;
-    `
-  );
-  const posts = await Promise.all(postIds.map((post) => getPostById(post.id)));
-  //   console.log(posts, 'this is the newest post addition')
-  // console.log(await getPostById(3), 'this is the postIds')
-  return posts;
-}
+
 
 async function getPostsByUser(userId) {
   try {
@@ -216,6 +229,8 @@ async function getPostsByUser(userId) {
     throw error;
   }
 }
+
+
 
 const getUserById = async (userId) => {
   try {
@@ -339,5 +354,6 @@ module.exports = {
   getUserById,
   createTags,
   addTagsToPost,
-  getPostsByTagName
+  getPostsByTagName,
+  getAllTags
 };
