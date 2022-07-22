@@ -15,25 +15,17 @@ postsRouter.post("/", requireUser, async (req, res, next) => {
   const tagArr = tags.trim().split(/\s+/);
   const postData = {};
 
-  console.log(req.user.id, "this is all we have access to");
-
-  // only send the tags if there are some to send
   if (tagArr.length) {
     postData.tags = tagArr;
-    console.log(tagArr, "this is the tag Array");
   }
 
   try {
     postData.authorId = req.user.id;
     postData.title = title;
     postData.content = content;
+
     const post = await createPost(postData);
 
-    // add authorId, title, content to postData object
-    // const post = await createPost(postData);
-    // this will create the post and the tags for us
-    // if the post comes back, res.send({ post });
-    // otherwise, next an appropriate error object
     res.send({ post });
   } catch ({ name, message }) {
     next({ name, message });
@@ -84,7 +76,6 @@ postsRouter.delete("/:postId", requireUser, async (req, res, next) => {
 
       res.send({ post: updatedPost });
     } else {
-      // if there was a post, throw UnauthorizedUserError, otherwise throw PostNotFoundError
       next(
         post
           ? {
@@ -107,8 +98,7 @@ postsRouter.get("/", async (req, res) => {
     const allPosts = await getAllPosts();
 
     const activePosts = allPosts.filter((post) => {
-        return post.active || (req.user && post.author.id === req.user.id)
-    
+      return post.active || (req.user && post.author.id === req.user.id);
     });
 
     res.send(activePosts);

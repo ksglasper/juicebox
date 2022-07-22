@@ -2,7 +2,6 @@ const express = require("express");
 const usersRouter = express.Router();
 const { getAllUsers, getUserByUsername, createUser } = require("../db");
 const jwt = require("jsonwebtoken");
-const secret = process.env.JWT_SECRET;
 
 
 usersRouter.use((req, res, next) => {
@@ -70,13 +69,9 @@ usersRouter.post("/login", async (req, res, next) => {
 
     if (user && user.password == password) {
 
-        console.log({ id: user.id, username },process.env.JWT_SECRET,'object being made')
-        // console.log(process.env.JWT_SECRET)
-        // console.log(secret)
 
         const token = jwt.sign({ id: user.id, username }, process.env.JWT_SECRET, { expiresIn: '1w' });
 
-        console.log(token, 'current token')
 
 
 

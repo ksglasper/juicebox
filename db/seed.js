@@ -92,8 +92,6 @@ const createInitialUser = async () => {
       active: true,
     });
 
-    // console.log(albert, 'the first of many!')
-
     console.log("Finished making user!");
   } catch (error) {
     throw error;
@@ -111,7 +109,7 @@ const createInitialPosts = async () => {
       title: "First Post",
       content:
         "This is my first post. I hope I love writing blogs as much as I love writing them.",
-        tags: ["#happy", "#youcandoanything"]
+      tags: ["#happy", "#youcandoanything"],
     });
 
     await createPost({
@@ -119,7 +117,7 @@ const createInitialPosts = async () => {
       title: "Sandra Here!",
       content:
         "This is my first post. I hope I love writing blogs as much as I love writing them. This is Sandra BTW.",
-        tags: ["#happy", "#worst-day-ever"]
+      tags: ["#happy", "#worst-day-ever"],
     });
 
     await createPost({
@@ -127,38 +125,13 @@ const createInitialPosts = async () => {
       title: "First Post, jk tenth post",
       content:
         "This is my 80th post. I hope I love writing blogs as much as I love writing them.",
-        tags: ["#happy", "#youcandoanything", "#canmandoeverything"]
+      tags: ["#happy", "#youcandoanything", "#canmandoeverything"],
     });
     console.log("Finished creating user posts...");
   } catch (error) {
     throw error;
   }
 };
-
-// async function createInitialTags() {
-//     try {
-//       console.log("Starting to create tags...");
-  
-//       const [happy, sad, inspo, catman] = await createTags([
-//         '#happy', 
-//         '#worst-day-ever', 
-//         '#youcandoanything',
-//         '#catmandoeverything'
-//       ]);
-//       const [postOne, postTwo, postThree] = await getAllPosts();
-      
-//       await addTagsToPost(postOne.id, [happy, inspo]);
-//       console.log('and here!')
-//       await addTagsToPost(postTwo.id, [sad, inspo]);
-//       await addTagsToPost(postThree.id, [happy, catman, inspo]);
-  
-//       console.log("Finished creating tags!");
-//     } catch (error) {
-//       console.log("Error creating tags!");
-//       throw error;
-//     }
-//   }
-
 
 async function rebuildDB() {
   try {
@@ -201,7 +174,7 @@ async function testDB() {
 
     console.log("Calling updatePost on posts[1], only updating tags");
     const updatePostTagsResult = await updatePost(posts[1].id, {
-      tags: ["#youcandoanything", "#redfish", "#bluefish"]
+      tags: ["#youcandoanything", "#redfish", "#bluefish"],
     });
     console.log("Result:", updatePostTagsResult);
 

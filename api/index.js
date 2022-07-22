@@ -6,7 +6,6 @@ const postsRouter = require("./posts");
 const tagsRouter = require("./tags");
 const jwt = require("jsonwebtoken");
 const { getUserById } = require("../db");
-const { JWT_SECRET } = process.env;
 
 
 apiRouter.use(async (req, res, next) => {
@@ -14,14 +13,12 @@ apiRouter.use(async (req, res, next) => {
   const auth = req.header("Authorization");
 
   if (!auth) {
-    // nothing to see here
     next();
   } else if (auth.startsWith(prefix)) {
     const token = auth.slice(prefix.length);
 
     try {
       const { id } = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(jwt.verify(token, process.env.JWT_SECRET), 'the verification process')
 
       if (id) {
         req.user = await getUserById(id);
